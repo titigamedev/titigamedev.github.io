@@ -1,115 +1,832 @@
 <!doctype html>
-<html lang="en">
+<html lang="fr">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>TGD · Titi Game Dev — Assets & Demos</title>
-  <link rel="stylesheet" href="assets/css/style.css">
-  <meta name="description" content="TGD (Titi Game Dev) — Unity assets showcase, demos and contact.">
+  <title>TGD · Titi Game Dev</title>
+  <meta name="description" content="TGD (Titi Game Dev) — Unity assets, YouTube, projets et contact.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=JetBrains+Mono:wght@400;600&family=Outfit:wght@300;400;500&display=swap" rel="stylesheet">
+
+  <style>
+    /* ─── VARIABLES ─────────────────────────────────────────────── */
+    :root {
+      --bg:        #080b12;
+      --surface:   #0e1220;
+      --card:      #131825;
+      --border:    #1e2840;
+      --accent:    #00e5a0;
+      --accent2:   #3b82f6;
+      --accent3:   #f59e0b;
+      --text:      #dce8f5;
+      --muted:     #5a7090;
+      --glow:      0 0 18px rgba(0,229,160,.28);
+      --glow2:     0 0 18px rgba(59,130,246,.28);
+      --radius:    12px;
+      --font-hd:   'Orbitron', monospace;
+      --font-mono: 'JetBrains Mono', monospace;
+      --font-body: 'Outfit', sans-serif;
+    }
+
+    /* ─── RESET / BASE ──────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-body);
+      font-weight: 300;
+      line-height: 1.7;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* Background grid texture */
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background-image:
+        linear-gradient(rgba(30,40,64,.4) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(30,40,64,.4) 1px, transparent 1px);
+      background-size: 40px 40px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ─── LAYOUT ────────────────────────────────────────────────── */
+    .container {
+      position: relative; z-index: 1;
+      max-width: 1060px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    section { padding: 88px 0; }
+
+    /* ─── SECTION LABEL ─────────────────────────────────────────── */
+    .section-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-family: var(--font-mono);
+      font-size: .72rem;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 14px;
+    }
+    .section-tag::before {
+      content: '';
+      display: block;
+      width: 28px; height: 1.5px;
+      background: var(--accent);
+    }
+
+    .section-title {
+      font-family: var(--font-hd);
+      font-size: clamp(1.5rem, 4vw, 2.2rem);
+      font-weight: 700;
+      letter-spacing: .04em;
+      line-height: 1.2;
+      margin-bottom: 14px;
+      color: #fff;
+    }
+    .section-sub {
+      color: var(--muted);
+      font-size: .95rem;
+      max-width: 540px;
+      margin-bottom: 48px;
+    }
+
+    /* ─── HEADER ────────────────────────────────────────────────── */
+    .site-header {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(8,11,18,.82);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+    }
+    .header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 64px;
+      gap: 24px;
+    }
+    .brand {
+      display: flex; align-items: center; gap: 12px;
+      text-decoration: none;
+    }
+    .logo {
+      width: 36px; height: 36px;
+      object-fit: contain;
+      /* fallback if no image */
+      background: var(--accent);
+      border-radius: 6px;
+      padding: 4px;
+    }
+    .brand-name {
+      font-family: var(--font-hd);
+      font-size: 1rem;
+      font-weight: 900;
+      color: #fff;
+      letter-spacing: .08em;
+    }
+    .brand-sub {
+      font-family: var(--font-mono);
+      font-size: .62rem;
+      color: var(--muted);
+      letter-spacing: .12em;
+    }
+    .main-nav {
+      display: flex; gap: 4px;
+    }
+    .main-nav a {
+      font-family: var(--font-mono);
+      font-size: .76rem;
+      letter-spacing: .08em;
+      color: var(--muted);
+      text-decoration: none;
+      padding: 6px 14px;
+      border-radius: 6px;
+      transition: color .2s, background .2s;
+    }
+    .main-nav a:hover {
+      color: var(--accent);
+      background: rgba(0,229,160,.08);
+    }
+
+    /* ─── HERO ──────────────────────────────────────────────────── */
+    .hero {
+      padding: 110px 0 80px;
+      position: relative;
+    }
+    .hero::after {
+      content: '';
+      position: absolute;
+      top: -60px; right: -100px;
+      width: 500px; height: 500px;
+      background: radial-gradient(circle, rgba(0,229,160,.08) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .hero-eyebrow {
+      font-family: var(--font-mono);
+      font-size: .78rem;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 20px;
+    }
+    .hero h2 {
+      font-family: var(--font-hd);
+      font-size: clamp(2rem, 6vw, 3.6rem);
+      font-weight: 900;
+      letter-spacing: .04em;
+      line-height: 1.1;
+      color: #fff;
+      margin-bottom: 24px;
+    }
+    .hero h2 em {
+      font-style: normal;
+      color: var(--accent);
+    }
+    .hero-lead {
+      font-size: 1.1rem;
+      color: var(--muted);
+      max-width: 540px;
+      margin-bottom: 40px;
+    }
+    .hero-cta { display: flex; gap: 14px; flex-wrap: wrap; }
+
+    /* ─── BUTTONS ───────────────────────────────────────────────── */
+    .btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-family: var(--font-mono);
+      font-size: .8rem;
+      letter-spacing: .06em;
+      padding: 11px 22px;
+      border-radius: 8px;
+      text-decoration: none;
+      cursor: pointer;
+      border: 1.5px solid transparent;
+      transition: all .22s;
+      font-weight: 600;
+    }
+    .btn-primary {
+      background: var(--accent);
+      color: #050a0e;
+      border-color: var(--accent);
+    }
+    .btn-primary:hover {
+      background: transparent;
+      color: var(--accent);
+      box-shadow: var(--glow);
+    }
+    .btn-outline {
+      background: transparent;
+      color: var(--text);
+      border-color: var(--border);
+    }
+    .btn-outline:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+    .btn-blue {
+      background: transparent;
+      color: var(--accent2);
+      border-color: var(--accent2);
+    }
+    .btn-blue:hover {
+      background: rgba(59,130,246,.12);
+      box-shadow: var(--glow2);
+    }
+    .btn-yt {
+      background: #ff0000;
+      color: #fff;
+      border-color: #ff0000;
+    }
+    .btn-yt:hover { opacity: .85; }
+
+    /* ─── DIVIDER ───────────────────────────────────────────────── */
+    .section-divider {
+      border: none;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--border), transparent);
+      margin: 0;
+    }
+
+    /* ─── ASSET CARDS ───────────────────────────────────────────── */
+    .assets-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 24px;
+    }
+    .asset-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      transition: border-color .22s, transform .22s, box-shadow .22s;
+      position: relative;
+    }
+    .asset-card::before {
+      content: '';
+      position: absolute;
+      inset: 0; border-radius: var(--radius);
+      background: linear-gradient(135deg, rgba(0,229,160,.04), transparent 60%);
+      pointer-events: none;
+    }
+    .asset-card:hover {
+      border-color: var(--accent);
+      transform: translateY(-4px);
+      box-shadow: 0 12px 40px rgba(0,0,0,.4), var(--glow);
+    }
+    .asset-img {
+      width: 100%; aspect-ratio: 16/9;
+      object-fit: cover;
+      background: var(--surface);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .asset-img-placeholder {
+      width: 100%; aspect-ratio: 16/9;
+      background: linear-gradient(135deg, #0e1728, #131e36);
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--font-mono);
+      font-size: .7rem;
+      color: var(--muted);
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      border-bottom: 1px solid var(--border);
+    }
+    .asset-body { padding: 22px 22px 24px; }
+    .asset-tag {
+      display: inline-block;
+      font-family: var(--font-mono);
+      font-size: .65rem;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--accent);
+      background: rgba(0,229,160,.1);
+      border: 1px solid rgba(0,229,160,.25);
+      padding: 3px 10px;
+      border-radius: 4px;
+      margin-bottom: 10px;
+    }
+    .asset-title {
+      font-family: var(--font-hd);
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 10px;
+    }
+    .asset-desc {
+      font-size: .88rem;
+      color: var(--muted);
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    .asset-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+
+    /* ─── YOUTUBE ───────────────────────────────────────────────── */
+    .yt-hero {
+      display: flex; align-items: center; gap: 20px;
+      margin-bottom: 44px;
+    }
+    .yt-icon {
+      width: 52px; height: 52px;
+      background: #ff0000;
+      border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .yt-icon svg { width: 24px; fill: #fff; }
+
+    /* Accordion for videos */
+    .video-list { display: flex; flex-direction: column; gap: 10px; }
+
+    .video-item {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+      transition: border-color .2s;
+    }
+    .video-item:hover { border-color: rgba(255,0,0,.4); }
+
+    .video-toggle {
+      width: 100%;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      text-align: left;
+      color: var(--text);
+    }
+    .video-toggle:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
+    .video-thumb-wrap {
+      flex-shrink: 0;
+      width: 80px; height: 45px;
+      border-radius: 6px;
+      overflow: hidden;
+      background: var(--surface);
+      border: 1px solid var(--border);
+    }
+    .video-thumb-wrap img { width: 100%; height: 100%; object-fit: cover; }
+    .video-thumb-placeholder {
+      width: 80px; height: 45px;
+      background: linear-gradient(135deg, #1a0000, #2a0000);
+      border-radius: 6px;
+      border: 1px solid rgba(255,0,0,.2);
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .video-thumb-placeholder svg { width: 16px; fill: rgba(255,0,0,.6); }
+    .video-meta { flex: 1; min-width: 0; }
+    .video-title {
+      font-family: var(--font-body);
+      font-weight: 500;
+      font-size: .92rem;
+      color: #fff;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+      margin-bottom: 2px;
+    }
+    .video-date {
+      font-family: var(--font-mono);
+      font-size: .68rem;
+      color: var(--muted);
+    }
+    .video-chevron {
+      flex-shrink: 0;
+      width: 20px; height: 20px;
+      color: var(--muted);
+      transition: transform .25s, color .2s;
+    }
+    .video-item.open .video-chevron { transform: rotate(180deg); color: var(--accent); }
+
+    .video-body {
+      display: none;
+      padding: 0 20px 18px;
+      border-top: 1px solid var(--border);
+    }
+    .video-item.open .video-body { display: block; }
+    .video-description {
+      font-size: .86rem;
+      color: var(--muted);
+      margin: 14px 0 16px;
+    }
+    .video-iframe-wrap {
+      position: relative; padding-bottom: 56.25%;
+      border-radius: 8px; overflow: hidden;
+      margin-bottom: 14px;
+    }
+    .video-iframe-wrap iframe {
+      position: absolute; inset: 0;
+      width: 100%; height: 100%;
+      border: none;
+    }
+
+    /* ─── PROJECTS ──────────────────────────────────────────────── */
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 22px;
+    }
+    .project-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 26px 24px;
+      position: relative;
+      transition: border-color .2s, transform .2s, box-shadow .2s;
+    }
+    .project-card::before {
+      content: '';
+      position: absolute;
+      inset: 0; border-radius: var(--radius);
+      background: linear-gradient(135deg, rgba(59,130,246,.04), transparent 60%);
+      pointer-events: none;
+    }
+    .project-card:hover {
+      border-color: var(--accent2);
+      transform: translateY(-4px);
+      box-shadow: 0 12px 40px rgba(0,0,0,.4), var(--glow2);
+    }
+    .project-status {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-family: var(--font-mono);
+      font-size: .65rem;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      margin-bottom: 14px;
+    }
+    .status-dot {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: var(--accent3);
+      animation: pulse 2s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50%       { opacity: .4; }
+    }
+    .project-status.wip  { color: var(--accent3); }
+    .project-status.plan { color: var(--accent2); }
+    .project-status.plan .status-dot { background: var(--accent2); animation: none; }
+    .project-title {
+      font-family: var(--font-hd);
+      font-size: 1rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 10px;
+    }
+    .project-desc {
+      font-size: .86rem;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+    .project-tags {
+      display: flex; flex-wrap: wrap; gap: 6px;
+      margin-top: 18px;
+    }
+    .tag {
+      font-family: var(--font-mono);
+      font-size: .64rem;
+      letter-spacing: .08em;
+      color: var(--muted);
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 3px 9px;
+      border-radius: 4px;
+    }
+
+    /* ─── CONTACT ───────────────────────────────────────────────── */
+    .contact-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 44px 44px 40px;
+      max-width: 600px;
+      position: relative;
+      overflow: hidden;
+    }
+    .contact-card::before {
+      content: '';
+      position: absolute;
+      bottom: -60px; right: -60px;
+      width: 240px; height: 240px;
+      background: radial-gradient(circle, rgba(0,229,160,.07), transparent 70%);
+      pointer-events: none;
+    }
+    .contact-email {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-family: var(--font-mono);
+      font-size: 1rem;
+      color: var(--accent);
+      text-decoration: none;
+      margin: 20px 0 28px;
+      padding: 14px 20px;
+      border: 1px solid rgba(0,229,160,.25);
+      border-radius: 8px;
+      background: rgba(0,229,160,.06);
+      transition: background .2s, border-color .2s;
+    }
+    .contact-email:hover {
+      background: rgba(0,229,160,.12);
+      border-color: var(--accent);
+    }
+    .contact-links { display: flex; gap: 12px; flex-wrap: wrap; }
+
+    /* ─── FOOTER ────────────────────────────────────────────────── */
+    .site-footer {
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      padding: 28px 0;
+    }
+    .footer-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .footer-copy {
+      font-family: var(--font-mono);
+      font-size: .72rem;
+      color: var(--muted);
+      letter-spacing: .06em;
+    }
+    .footer-links {
+      display: flex; gap: 20px;
+    }
+    .footer-links a {
+      font-family: var(--font-mono);
+      font-size: .72rem;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color .2s;
+    }
+    .footer-links a:hover { color: var(--accent); }
+
+    /* ─── ENTRANCE ANIMATIONS ───────────────────────────────────── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity .55s ease, transform .55s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: none;
+    }
+
+    /* ─── RESPONSIVE ────────────────────────────────────────────── */
+    @media (max-width: 620px) {
+      .main-nav a { padding: 6px 9px; font-size: .7rem; }
+      section { padding: 60px 0; }
+      .contact-card { padding: 28px 22px; }
+    }
+  </style>
 </head>
 <body>
 
+<!-- ═══ HEADER ══════════════════════════════════════════════════ -->
 <header class="site-header">
   <div class="container header-inner">
-    <div class="brand">
-      <img src="assets/img/logo-resize.png" alt="TGD logo" class="logo" />
+    <a class="brand" href="#">
+      <img src="assets/img/logo-resize.png" alt="TGD logo" class="logo"
+           onerror="this.style.display='none'">
       <div>
-        <h1> TGD <span class="studio">· titi-game-dev</span></h1>
-        <p class="tagline">Unity assets & tools — UGUI-focused utilities</p>
+        <div class="brand-name">TGD</div>
+        <div class="brand-sub">titi-game-dev</div>
       </div>
-    </div>
-
+    </a>
     <nav class="main-nav">
+      <a href="#assets">Assets</a>
       <a href="#youtube">YouTube</a>
-      <a href="#assets">My Assets</a>
+      <a href="#projects">Projets</a>
       <a href="#contact">Contact</a>
     </nav>
   </div>
 </header>
 
 <main>
-  <!-- Hero -->
+
+  <!-- ═══ HERO ════════════════════════════════════════════════════ -->
   <section class="hero">
     <div class="container">
-      <h2>Small. Clean. Focused on UGUI.</h2>
-      <p class="lead">Automatic input device detection (gamepad ↔ mouse & keyboard) for Unity UGUI — simple to install, easy to integrate.</p>
+      <p class="hero-eyebrow">// Unity · UGUI · Game Dev</p>
+      <h2>Small tools.<br>Clean code.<br><em>Real impact.</em></h2>
+      <p class="hero-lead">
+        Je développe des assets Unity légers et prêts pour la production,
+        principalement focalisés sur UGUI — pour vous faire gagner du temps
+        et garder votre code propre.
+      </p>
       <div class="hero-cta">
-        <a class="btn primary" href="#assets">See my asset</a>
-        <a class="btn outline" href="#contact">Contact me</a>
+        <a class="btn btn-primary" href="#assets">Voir mes assets</a>
+        <a class="btn btn-outline" href="#contact">Me contacter</a>
       </div>
     </div>
   </section>
 
-  <!-- YouTube -->
-  <section id="youtube" class="section">
-    <div class="container grid-two">
-      <div>
-        <h3>Follow on YouTube</h3>
-        <p>I post short demos and setup walkthroughs on the channel. Subscribe for updates and tutorials.</p>
-        <a class="btn youtube" href="https://youtube.com/@titi-game-dev?sub_confirmation=1" target="_blank" rel="noopener">
-          <img src="assets/img/youtube-icon.png" alt="YouTube" class="icon"> Visit Titi Game Dev
-        </a>
-      </div>
-      <div class="video-placeholder">
-        <!-- Replace by an embedded video iframe if you want -->
-        <img src="assets/img/asset-placeholder.png" alt="Demo screenshot" />
-      </div>
-    </div>
-  </section>
+  <hr class="section-divider">
 
-  <!-- Assets -->
-  <section id="assets" class="section alt">
+  <!-- ═══ ASSETS ══════════════════════════════════════════════════ -->
+  <section id="assets">
     <div class="container">
-      <h3>My Assets</h3>
-      <p>One curated Unity asset for now — built to be lightweight and production-ready.</p>
+      <p class="section-tag">Unity Asset Store</p>
+      <h2 class="section-title">Mes Assets</h2>
+      <p class="section-sub">
+        Des outils ciblés, sans fioriture — conçus pour s'intégrer proprement
+        dans n'importe quel projet Unity.
+      </p>
 
       <div class="assets-grid">
-        <!-- Asset card: duplicate for each asset -->
-        <article class="asset-card">
-          <img class="asset-screenshot" src="assets/img/asset-placeholder.png" alt="Asset screenshot">
+
+        <!-- ── Card 1 : à remplir ── -->
+        <article class="asset-card reveal">
+          <div class="asset-img-placeholder">[ screenshot ]</div>
           <div class="asset-body">
-            <h4>ASSET_NAME_HERE</h4>
-            <p class="asset-desc">Automatic Input Device Switcher for UGUI — handles gamepad vs mouse/keyboard, hides/shows cursor, and selects default UI element automatically.</p>
+            <span class="asset-tag">UGUI</span>
+            <div class="asset-title">Input Device Auto-Switcher</div>
+            <p class="asset-desc">
+              Détection automatique manette ↔ souris/clavier pour Unity UGUI —
+              masque/affiche le curseur, sélectionne l'élément UI par défaut.
+              Léger, sans dépendances.
+            </p>
             <div class="asset-actions">
-              <a class="btn" target="_blank" rel="noopener" href="ASSET_STORE_LINK_HERE">View on Unity Asset Store</a>
-              <a class="btn outline" href="#contact">Contact author</a>
+              <a class="btn btn-primary" href="https://assetstore.unity.com/packages/tools/input-management/input-device-ugui-manager-348708" target="_blank" rel="noopener">
+                <svg width="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                Asset Store
+              </a>
+              <a class="btn btn-outline" href="#contact">Contact</a>
             </div>
           </div>
         </article>
+
+        <!-- ── Duplicate this card per new asset ── -->
+
       </div>
     </div>
   </section>
 
-  <!-- Contact -->
-  <section id="contact" class="section">
-    <div class="container grid-two">
-      <div>
-        <h3>Contact</h3>
-        <p>If you have questions, need support, or want custom work, get in touch.</p>
-        <p class="contact-line">
-          <img class="icon-sm" src="assets/img/email-icon.png" alt="email"> 
-          <a href="mailto:titi.game.dev.pro@gmail.com">titi.game.dev.pro@gmail.com</a>
-        </p>
+  <hr class="section-divider">
+
+  <!-- ═══ YOUTUBE ══════════════════════════════════════════════════ -->
+  <section id="youtube">
+    <div class="container">
+      <p class="section-tag">Chaîne YouTube</p>
+      <h2 class="section-title">Vidéos & Démos</h2>
+      <p class="section-sub">
+        Démos rapides, setup walkthroughs et tutoriels sur mes assets.
+      </p>
+
+      <div class="yt-hero reveal">
+        <div class="yt-icon">
+          <svg viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+        </div>
+        <div>
+          <strong style="font-size:1rem; color:#fff;">Titi Game Dev</strong><br>
+          <span style="color:var(--muted); font-size:.88rem;">Abonnez-vous pour suivre l'avancement de mes assets et projets.</span>
+        </div>
+        <a class="btn btn-yt" href="https://youtube.com/@titi-game-dev?sub_confirmation=1" target="_blank" rel="noopener" style="margin-left:auto; flex-shrink:0;">
+          <svg width="14" viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+          S'abonner
+        </a>
       </div>
-      <div>
-        <h3>Connect</h3>
-        <p>Links</p>
-        <ul class="links">
-          <li><a href="https://youtube.com/@titi-game-dev?sub_confirmation=1" target="_blank">YouTube Channel</a></li>
-          <li><a href="https://github.com/" target="_blank">GitHub</a></li>
-        </ul>
+
+      <!-- Liste dépliante de vidéos -->
+      <div class="video-list">
+
+        <!--
+          POUR AJOUTER UNE VIDÉO :
+          1. Remplacez VIDEO_ID par l'identifiant YouTube (ex: dQw4w9WgXcQ)
+          2. Remplacez le titre, la date et la description
+          3. Pour la miniature automatique : src="https://img.youtube.com/vi/VIDEO_ID/mqdefault.jpg"
+        -->
+
+        <div class="video-item reveal">
+          <button class="video-toggle" aria-expanded="false">
+            <div class="video-thumb-placeholder">
+              <svg viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+            </div>
+            <div class="video-meta">
+              <div class="video-title">TITRE_VIDEO_ICI</div>
+              <div class="video-date">DATE_ICI</div>
+            </div>
+            <svg class="video-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="video-body">
+            <div class="video-iframe-wrap">
+              <!-- Remplacez VIDEO_ID ici -->
+              <iframe src="https://www.youtube.com/embed/VIDEO_ID" allowfullscreen loading="lazy"></iframe>
+            </div>
+            <p class="video-description">Description courte de la vidéo — ce qu'on y apprend.</p>
+            <a class="btn btn-yt" href="https://youtu.be/VIDEO_ID" target="_blank" rel="noopener" style="font-size:.75rem; padding:8px 16px;">
+              Voir sur YouTube
+            </a>
+          </div>
+        </div>
+
+        <!-- Dupliquez le bloc .video-item ci-dessus pour chaque vidéo supplémentaire -->
+
+      </div>
+    </div>
+  </section>
+
+  <hr class="section-divider">
+
+  <!-- ═══ PROJETS EN COURS ═════════════════════════════════════════ -->
+  <section id="projects">
+    <div class="container">
+      <p class="section-tag">En développement</p>
+      <h2 class="section-title">Projets en cours</h2>
+      <p class="section-sub">
+        Ce sur quoi je travaille en ce moment — assets et outils à venir.
+      </p>
+
+      <div class="projects-grid">
+
+        <div class="project-card reveal">
+          <div class="project-status wip">
+            <span class="status-dot"></span> En cours
+          </div>
+          <div class="project-title">PROJET_1_ICI</div>
+          <p class="project-desc">
+            Description du projet en cours — fonctionnalité principale, état d'avancement.
+          </p>
+          <div class="project-tags">
+            <span class="tag">Unity</span>
+            <span class="tag">UGUI</span>
+          </div>
+        </div>
+
+        <div class="project-card reveal">
+          <div class="project-status plan">
+            <span class="status-dot"></span> Planifié
+          </div>
+          <div class="project-title">PROJET_2_ICI</div>
+          <p class="project-desc">
+            Description d'un projet à venir — idée, périmètre envisagé.
+          </p>
+          <div class="project-tags">
+            <span class="tag">Unity</span>
+            <span class="tag">C#</span>
+          </div>
+        </div>
+
+        <!-- Dupliquez .project-card pour chaque projet supplémentaire -->
+
+      </div>
+    </div>
+  </section>
+
+  <hr class="section-divider">
+
+  <!-- ═══ CONTACT ══════════════════════════════════════════════════ -->
+  <section id="contact">
+    <div class="container">
+      <p class="section-tag">Contact</p>
+      <h2 class="section-title">Me joindre</h2>
+      <p class="section-sub">
+        Questions, support ou travail sur mesure — je lis mes mails.
+      </p>
+
+      <div class="contact-card reveal">
+        <p style="color:var(--muted); font-size:.9rem;">Adresse e-mail</p>
+        <a class="contact-email" href="mailto:titi.game.dev.pro@gmail.com">
+          <svg width="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          titi.game.dev.pro@gmail.com
+        </a>
+        <p style="color:var(--muted); font-size:.85rem; margin-bottom:16px;">Retrouvez-moi aussi sur :</p>
+        <div class="contact-links">
+          <a class="btn btn-yt" href="https://youtube.com/@titi-game-dev?sub_confirmation=1" target="_blank" rel="noopener">
+            <svg width="13" viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+            YouTube
+          </a>
+          <a class="btn btn-outline" href="https://github.com/" target="_blank" rel="noopener">
+            <svg width="13" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0 1 12 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/></svg>
+            GitHub
+          </a>
+        </div>
       </div>
     </div>
   </section>
 
 </main>
 
+<!-- ═══ FOOTER ═══════════════════════════════════════════════════ -->
 <footer class="site-footer">
   <div class="container">
     <div class="footer-inner">
-      <div>© <span id="year"></span> TGD · titi-game-dev</div>
+      <div class="footer-copy">© <span id="year"></span> TGD · titi-game-dev</div>
       <div class="footer-links">
         <a href="#assets">Assets</a>
+        <a href="#youtube">YouTube</a>
+        <a href="#projects">Projets</a>
         <a href="#contact">Contact</a>
       </div>
     </div>
@@ -117,7 +834,32 @@
 </footer>
 
 <script>
+  // Year
   document.getElementById('year').textContent = new Date().getFullYear();
+
+  // ── Accordion videos ──────────────────────────────────────────
+  document.querySelectorAll('.video-toggle').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const item = btn.closest('.video-item');
+      const isOpen = item.classList.toggle('open');
+      btn.setAttribute('aria-expanded', isOpen);
+    });
+  });
+
+  // ── Scroll reveal ─────────────────────────────────────────────
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.12 });
+
+  document.querySelectorAll('.reveal').forEach((el, i) => {
+    el.style.transitionDelay = `${(i % 4) * 80}ms`;
+    observer.observe(el);
+  });
 </script>
 
 </body>
